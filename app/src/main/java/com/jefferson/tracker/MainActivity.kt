@@ -1,7 +1,9 @@
 package com.jefferson.tracker
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     val TAG = "TRACKER_MAIN"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -31,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "Failed to update location: $it")
             }
         }
-
     }
 
     override fun onResume() {
@@ -40,5 +42,9 @@ class MainActivity : AppCompatActivity() {
             GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
 
         Log.i(TAG, "Google play services availability: " + ConnectionResult(available))
+    }
+
+    fun newSession(view: View) {
+        startActivity(Intent(this, SessionActivity::class.java))
     }
 }

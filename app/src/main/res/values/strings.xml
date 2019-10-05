@@ -3,4 +3,7 @@
     <string name="locationLabelText">Location:</string>
     <string name="LocationTextUnknown">Unknown</string>
     <string name="UpdateLocationButtonText">Update location</string>
+    <string name="start_tracking_button_text">Start tracking</string>
+    <string name="stop_tracking_button_text">Stop tracking</string>
+    <string name="new_session_button_text">New session</string>
 </resources>

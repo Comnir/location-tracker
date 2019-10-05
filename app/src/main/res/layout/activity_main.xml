@@ -6,33 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/locationView"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="73dp"
-        android:text="@string/LocationTextUnknown"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateLocationButton" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/locationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/locationLabelText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/locationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/locationLabelText" />
 
-    <Button
-        android:id="@+id/updateLocationButton"
-        android:layout_width="108dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/UpdateLocationButtonText"
-        app:layout_constraintBottom_toTopOf="@+id/locationView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationLabel" />
+        <Button
+            android:id="@+id/updateLocationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/UpdateLocationButtonText" />
+
+        <TextView
+            android:id="@+id/locationView"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="73dp"
+            android:text="@string/LocationTextUnknown" />
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+
+        <Button
+            android:id="@+id/newSessionButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="newSession"
+            android:text="@string/new_session_button_text" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
