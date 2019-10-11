@@ -6,4 +6,7 @@
     <string name="start_tracking_button_text">Start tracking</string>
     <string name="stop_tracking_button_text">Stop tracking</string>
     <string name="new_session_button_text">New session</string>
+    <string name="notification_title">Tracking location</string>
+    <string name="notification_message">Location tracking session is active. Tracking can be stopped in the application.</string>
+    <string name="ticker_text">Tracking active</string>
 </resources>

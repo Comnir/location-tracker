@@ -3,7 +3,7 @@
     package="com.jefferson.tracker">
     <!-- ACCESS_FINE_LOCATION -->
     <!-- ACCESS_BACKGROUND_LOCATION -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,5 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.jefferson.tracker.service.LocationTrackingService"
+            android:foregroundServiceType="location" />
     </application>
+
 </manifest>

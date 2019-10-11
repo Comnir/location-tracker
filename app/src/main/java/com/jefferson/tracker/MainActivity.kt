@@ -23,13 +23,14 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val updateLocationButton = findViewById<Button>(R.id.updateLocationButton) as Button
+        val updateLocationButton = findViewById<Button>(R.id.updateLocationButton)
         updateLocationButton.setOnClickListener {
             val locationTask = fusedLocationClient.lastLocation
             locationTask.addOnSuccessListener {
                 Log.i(TAG, "Successful location retrieval: $it")
                 it?.let { findViewById<TextView>(R.id.locationView).setText(it.toString()) }
             }
+
             locationTask.addOnFailureListener {
                 Log.i(TAG, "Failed to update location: $it")
             }
@@ -45,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun newSession(view: View) {
-        startActivity(Intent(this, SessionActivity::class.java))
+        val intent = Intent(this, SessionActivity::class.java)
+        startActivity(intent)
     }
+
 }
