@@ -50,7 +50,8 @@ class SessionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        setContentView(R.layout.activity_list_item)
+        serviceIntent = Intent(this, LocationTrackingService::class.java)
+
         setContentView(R.layout.activity_session)
     }
 
@@ -84,6 +85,8 @@ class SessionActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var serviceIntent: Intent
+
     override fun onStart() {
 //    fun onStartO() {
         super.onStart()
@@ -96,7 +99,7 @@ class SessionActivity : AppCompatActivity() {
         }
 
         if (bindService(
-                Intent(this, LocationTrackingService::class.java),
+                serviceIntent,
                 serviceConnection,
                 Context.BIND_AUTO_CREATE
             )
@@ -148,15 +151,15 @@ class SessionActivity : AppCompatActivity() {
     fun startSession(view: View) {
         checkLocationSettings()
 
-        Intent(this, LocationTrackingService::class.java).also {
-            Log.i(TAG, "Service started? " + startService(it))
-        }
+        Log.i(TAG, "Service started? " + startService(serviceIntent))
 
-        trackingService?.startSession(notification)
+        val sessionId = System.currentTimeMillis()
+        trackingService?.startSession(notification, sessionId)
     }
 
     fun stopSession(view: View) {
         trackingService?.stopSession()
+        stopService(serviceIntent)
     }
 
     private fun checkPermission(): Boolean {

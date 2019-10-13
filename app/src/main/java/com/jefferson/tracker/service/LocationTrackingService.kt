@@ -9,23 +9,21 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
+import com.jefferson.tracker.persistance.Persistence
+import java.util.concurrent.atomic.AtomicReference
 
 class LocationTrackingService : IntentService("LocationTrackingService") {
     private val NOTIFICATION_ID: Int = 78
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var persistence: Persistence
+    private var sessionId: AtomicReference<Long> = AtomicReference()
+    private var lastCallback: LocationCallback? = null
 
     val locationRequest: LocationRequest by lazy {
         val locationRequest = LocationRequest()
             .setInterval(1000)
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         locationRequest
-    }
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(location: LocationResult?) {
-            super.onLocationResult(location)
-            Log.i(TAG, "Location callback called with $location")
-        }
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -40,32 +38,64 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i(TAG, "onStartCommand called")
+        Log.i(TAG, "onSed")
         return Service.START_NOT_STICKY
     }
 
     override fun onCreate() {
         super.onCreate()
-        Log.i(TAG, "One-time call to onCreate")
-
+        persistence = Persistence.getInstance(applicationContext)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
-    fun startSession(notification: Notification) {
-        Log.i(TAG, "Start tracking session - will start service.")
+    fun startSession(notification: Notification, newSessionId: Long) {
+        Log.i(TAG, "Start tracking session ID $newSessionId")
 
-        startForeground(NOTIFICATION_ID, notification)
+        val currentCallback: LocationCallback
+        synchronized(sessionId) {
+            if (null != sessionId.get()) {
+                throw IllegalStateException("Session is already in progress - this indicates a bug in the application.")
+            }
 
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
+            sessionId.set(newSessionId)
+            currentCallback = locationCallbackForSession(newSessionId)
+            lastCallback = currentCallback
+
+            startForeground(NOTIFICATION_ID, notification)
+
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                currentCallback,
+                Looper.getMainLooper()
+            )
+        }
+
     }
 
     fun stopSession() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        stopForeground(true)
+        synchronized(sessionId) {
+            if (null == sessionId.get()) {
+                Log.e(TAG, "Stopping session, but session ID is missing.")
+                return
+            }
+
+            fusedLocationClient.removeLocationUpdates(lastCallback)
+            stopForeground(true)
+            sessionId.set(null)
+            lastCallback = null
+        }
+    }
+
+    fun locationCallbackForSession(sessionIdForCallback: Long): LocationCallback {
+        return object : LocationCallback() {
+            override fun onLocationResult(location: LocationResult?) {
+                super.onLocationResult(location)
+                Log.i(TAG, "Location callback called with ${location?.lastLocation}")
+                location?.lastLocation?.let {
+                    persistence.addLocation(sessionIdForCallback, it)
+                }
+            }
+        }
     }
 
     class TrackingServiceBinder(val serviceInstance: LocationTrackingService) : Binder() {
