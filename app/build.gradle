@@ -41,6 +41,25 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // https://codelabs.developers.google.com/codelabs/android-room-with-a-view-kotlin/#0
+    // https://developer.android.com/kotlin/coroutines
+    // kotlin co-routines aren't in use, because installation fails with
+    /*
+    E/octvm_klo( 3329): get package info failed for /system/bin/dex2oat
+    I/octvm_klo( 3329): summary:[signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0xb
+    I/octvm_klo( 3329): ]
+    I/octvm_klo( 3329): summary: [/system/lib/libart-compiler.so (_ZNSt3__127__tree_balance_after_insertIPNS_16__tree_node_baseIPvEEEEvT_S5_+29)]
+    ...
+    Package couldn't be installed in /data/app/com.example.kotlincoroutine-1
+       com.android.server.pm.PackageManagerException: scanPackageLI
+       at com.android.server.pm.PackageManagerService.scanPackageDirtyLI(PackageManagerService.java:6544)
+       at com.android.server.pm.PackageManagerService.scanPackageLI(PackageManagerService.java:5779)
+    ...
+    E/Pm      (14490): Failure details: Bundle[{android.content.pm.extra.STATUS=4, android.content.pm.extra.SESSION_ID=533362411, android.content.pm.extra.LEGACY_STATUS=-11, android.content.pm.extra.STATUS_MESSAGE=INSTALL_FAILED_DEXOPT: Package couldn't be installed in /data/app/com.example.kotlincoroutine-1: scanPackageLI}]
+     */
+    //  Fails only on Redmi Note 2 / Android 5.0.2 / MIUI Global 9.6.1. Installation succeeds on Pocophone F1 - Android 8.0
+    // implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
+    // implementation "androidx.room:room-ktx:2.2.0"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.core:core-ktx:1.1.0'

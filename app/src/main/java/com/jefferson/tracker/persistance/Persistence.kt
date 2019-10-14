@@ -32,7 +32,27 @@ class Persistence(private val database: AppDatabase) {
     // TODO: use Kotlin co-routines for DB access
     // https://developer.android.com/kotlin/coroutines
 
+//    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
     fun addLocation(sessionId: Long, location: Location) {
+//        coroutineScope.launch {
+//            val dbLocation = Location(
+//                uid = 0, longitude = location.longitude,
+//                latitude = location.latitude, sessionId = sessionId, timestamp = location.time
+//            )
+//
+//            database.locationDao()
+//                .insertLocation(dbLocation)
+//                .subscribe(
+//                    { Log.d(TAG, "Added location to DB.") },
+//                    { e ->
+//                        Log.e(
+//                            TAG,
+//                            "Error encountered while inserting location to DB.",
+//                            e
+//                        )
+//                    }) // TODO: decide what to do with the returned Disposable
+//        }
         val message = Message()
         message.data.putLong("sessionId", sessionId)
         message.data.putParcelable("location", location)
