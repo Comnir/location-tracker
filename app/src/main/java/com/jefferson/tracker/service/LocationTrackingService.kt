@@ -10,6 +10,7 @@ import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
 import com.jefferson.tracker.persistance.Persistence
+import com.jefferson.tracker.persistance.Session
 import java.util.concurrent.atomic.AtomicReference
 
 class LocationTrackingService : IntentService("LocationTrackingService") {
@@ -17,6 +18,7 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var persistence: Persistence
     private var sessionId: AtomicReference<Long> = AtomicReference()
+    private lateinit var session: Session
     private var lastCallback: LocationCallback? = null
 
     val locationRequest: LocationRequest by lazy {
@@ -70,6 +72,7 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
             )
         }
 
+        session = Session(sessionId = newSessionId, startTime = System.currentTimeMillis())
     }
 
     fun stopSession() {
@@ -84,9 +87,11 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
             sessionId.set(null)
             lastCallback = null
         }
+
+        persistence.insertSession(session.copy(endTime = System.currentTimeMillis()))
     }
 
-    fun locationCallbackForSession(sessionIdForCallback: Long): LocationCallback {
+    private fun locationCallbackForSession(sessionIdForCallback: Long): LocationCallback {
         return object : LocationCallback() {
             override fun onLocationResult(location: LocationResult?) {
                 super.onLocationResult(location)

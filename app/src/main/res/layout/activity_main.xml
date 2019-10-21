@@ -36,12 +36,6 @@
             android:layout_marginTop="73dp"
             android:text="@string/LocationTextUnknown" />
 
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-
         <Button
             android:id="@+id/newSessionButton"
             style="?android:attr/buttonBarButtonStyle"
@@ -49,6 +43,12 @@
             android:layout_height="wrap_content"
             android:onClick="newSession"
             android:text="@string/new_session_button_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sessions_recyclerview_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 

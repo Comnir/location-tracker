@@ -9,4 +9,5 @@
     <string name="notification_title">Tracking location</string>
     <string name="notification_message">Location tracking session is active. Tracking can be stopped in the application.</string>
     <string name="ticker_text">Tracking active</string>
+    <string name="session_item_text">Session ID %1$d</string>
 </resources>

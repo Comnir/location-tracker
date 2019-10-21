@@ -7,10 +7,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.jefferson.tracker.session.SessionListAdapter
+import com.jefferson.tracker.session.SessionViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -35,6 +39,18 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "Failed to update location: $it")
             }
         }
+
+        findViewById<RecyclerView>(R.id.sessions_recyclerview_id).apply {
+            val sessionViewModel = SessionViewModel(application)
+            val adapter = SessionListAdapter(applicationContext)
+            this.adapter = adapter
+            sessionViewModel.sessions.observe(this@MainActivity, Observer {
+                it?.let {
+                    adapter.data = it
+                }
+            })
+        }
+
     }
 
     override fun onResume() {

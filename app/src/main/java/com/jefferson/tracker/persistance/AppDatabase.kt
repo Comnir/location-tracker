@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Location::class], version = 1)
+@Database(entities = [Location::class, Session::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
         private lateinit var instance: AppDatabase
@@ -15,10 +15,16 @@ abstract class AppDatabase : RoomDatabase() {
                 throw IllegalAccessError("Database is not yet initialized. 'Context' should be provided to allow initialization.")
             }
 
-            instance = Room.databaseBuilder(context, AppDatabase::class.java, "trackingdb").build()
-            return this.instance
+            synchronized(AppDatabase::class.java) {
+                if (!::instance.isInitialized) {
+                    instance =
+                        Room.databaseBuilder(context, AppDatabase::class.java, "trackingdb").build()
+                }
+            }
+            return instance
         }
     }
 
     abstract fun locationDao(): LocationDao
+    abstract fun sessionDao(): SessionDao
 }
