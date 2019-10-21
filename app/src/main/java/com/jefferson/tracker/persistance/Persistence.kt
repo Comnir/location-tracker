@@ -5,6 +5,9 @@ import android.location.Location
 import android.os.*
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.jefferson.tracker.session.Session
+import com.jefferson.tracker.session.SessionDao
+import com.jefferson.tracker.session.location.LocationDao
 import io.reactivex.schedulers.Schedulers
 
 class Persistence(
@@ -69,7 +72,7 @@ class Persistence(
         }
     }
 
-    fun allLocations(): LiveData<List<com.jefferson.tracker.persistance.Location>> {
+    fun allLocations(): LiveData<List<com.jefferson.tracker.session.location.Location>> {
         return locations
     }
 
@@ -112,7 +115,7 @@ class Persistence(
                     return
                 }
 
-                val dbLocation = Location(
+                val dbLocation = com.jefferson.tracker.session.location.Location(
                     uid = 0, longitude = location.longitude,
                     latitude = location.latitude, sessionId = sessionId, timestamp = location.time
                 )

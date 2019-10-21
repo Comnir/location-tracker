@@ -1,4 +1,4 @@
-package com.jefferson.tracker.persistance
+package com.jefferson.tracker.session
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

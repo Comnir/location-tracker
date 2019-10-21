@@ -10,7 +10,7 @@ import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
 import com.jefferson.tracker.persistance.Persistence
-import com.jefferson.tracker.persistance.Session
+import com.jefferson.tracker.session.Session
 import java.util.concurrent.atomic.AtomicReference
 
 class LocationTrackingService : IntentService("LocationTrackingService") {
@@ -72,7 +72,10 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
             )
         }
 
-        session = Session(sessionId = newSessionId, startTime = System.currentTimeMillis())
+        session = Session(
+            sessionId = newSessionId,
+            startTime = System.currentTimeMillis()
+        )
     }
 
     fun stopSession() {

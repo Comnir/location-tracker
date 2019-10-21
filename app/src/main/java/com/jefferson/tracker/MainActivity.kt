@@ -13,6 +13,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.jefferson.tracker.session.SessionActivity
 import com.jefferson.tracker.session.SessionListAdapter
 import com.jefferson.tracker.session.SessionViewModel
 

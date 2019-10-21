@@ -1,4 +1,4 @@
-package com.jefferson.tracker
+package com.jefferson.tracker.session
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Notification
@@ -20,13 +20,14 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.material.snackbar.Snackbar
+import com.jefferson.tracker.R
 import com.jefferson.tracker.service.LocationTrackingService
 
 
 class SessionActivity : AppCompatActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE: Int = 6
     private var trackingService: LocationTrackingService? = null
-    private lateinit var locationReqest: LocationRequest
+    private lateinit var locationRequest: LocationRequest
     private var serviceIsBound = false
     private val TAG = "TRACKING_SESSION"
     private val LOCATION_SETTINGS_FAILURE_REQUST_ID = 102
@@ -36,7 +37,7 @@ class SessionActivity : AppCompatActivity() {
             serviceIsBound = true
             if (binder is LocationTrackingService.TrackingServiceBinder) {
                 trackingService = binder.serviceInstance
-                locationReqest = binder.serviceInstance.locationRequest
+                locationRequest = binder.serviceInstance.locationRequest
             }
         }
 
@@ -67,7 +68,7 @@ class SessionActivity : AppCompatActivity() {
         }
 
         val settingsBuilder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationReqest)
+            .addLocationRequest(locationRequest)
 
         val client = LocationServices.getSettingsClient(this)
         val locationSettingsCheckTask = client.checkLocationSettings(settingsBuilder.build())
@@ -88,7 +89,6 @@ class SessionActivity : AppCompatActivity() {
     private lateinit var serviceIntent: Intent
 
     override fun onStart() {
-//    fun onStartO() {
         super.onStart()
 
         if (!checkPermission()) {
@@ -111,7 +111,6 @@ class SessionActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-//    fun onStopO() {
         super.onStop()
 
         if (serviceIsBound) {

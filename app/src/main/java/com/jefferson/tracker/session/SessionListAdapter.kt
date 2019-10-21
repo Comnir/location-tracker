@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jefferson.tracker.R
-import com.jefferson.tracker.persistance.Session
 
 class SessionListAdapter(val context: Context) : RecyclerView.Adapter<SessionItemViewHolder>() {
     var data = listOf<Session>()

@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.jefferson.tracker.session.Session
+import com.jefferson.tracker.session.SessionDao
+import com.jefferson.tracker.session.location.Location
+import com.jefferson.tracker.session.location.LocationDao
 
 @Database(entities = [Location::class, Session::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
