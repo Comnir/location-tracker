@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             this.adapter = adapter
             sessionViewModel.sessions.observe(this@MainActivity, Observer {
                 it?.let {
-                    adapter.data = it
+                    adapter.submitList(it)
                 }
             })
         }

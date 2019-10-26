@@ -3,28 +3,47 @@ package com.jefferson.tracker.session
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.jefferson.tracker.R
+import com.jefferson.tracker.databinding.SessionItemBinding
 
-class SessionListAdapter(val context: Context) : RecyclerView.Adapter<SessionItemViewHolder>() {
-    var data = listOf<Session>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount(): Int = data.size
+class SessionListAdapter(val context: Context) :
+    ListAdapter<Session, SessionItemViewHolder>(SessionDiffCallback()) {
 
     override fun onBindViewHolder(holder: SessionItemViewHolder, position: Int) {
-        val item = data[position]
-        holder.textView.text = context.getString(R.string.session_item_text, item.sessionId)
+        holder.bind(getItem(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SessionItemViewHolder {
-        val view = LayoutInflater
+        val layoutInflater = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.session_item, parent, false) as TextView
-        return SessionItemViewHolder(view)
+
+        val binding = SessionItemBinding.inflate(layoutInflater, parent, false)
+
+        return SessionItemViewHolder(binding)
+    }
+}
+
+class SessionDiffCallback : DiffUtil.ItemCallback<Session>() {
+    override fun areItemsTheSame(oldItem: Session, newItem: Session): Boolean {
+        return oldItem.sessionId == newItem.sessionId
+    }
+
+    override fun areContentsTheSame(oldItem: Session, newItem: Session): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+class SessionItemListener(val clickListener: (sessionId: Long) -> Unit) {
+    fun onClick(session: Session) = clickListener(session.sessionId)
+}
+
+class SessionItemViewHolder(val binding: SessionItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: Session) {
+        binding.session = item
+        binding.executePendingBindings()
     }
 }

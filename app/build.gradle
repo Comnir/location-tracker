@@ -31,6 +31,11 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    dataBinding {
+        // required for <data... block configurations to generate data binding classes
+        // From Data binding codelab: https://codelabs.developers.google.com/codelabs/android-databinding/#2
+        enabled true
+    }
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -40,7 +45,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     // https://codelabs.developers.google.com/codelabs/android-room-with-a-view-kotlin/#0
     // https://developer.android.com/kotlin/coroutines
     // kotlin co-routines aren't in use, because installation fails with
