@@ -94,6 +94,12 @@ class LocationTrackingService : IntentService("LocationTrackingService") {
         persistence.insertSession(session.copy(endTime = System.currentTimeMillis()))
     }
 
+    fun sessionIsActive(): Boolean {
+        synchronized(sessionId) {
+            return null != sessionId.get()
+        }
+    }
+
     private fun locationCallbackForSession(sessionIdForCallback: Long): LocationCallback {
         return object : LocationCallback() {
             override fun onLocationResult(location: LocationResult?) {

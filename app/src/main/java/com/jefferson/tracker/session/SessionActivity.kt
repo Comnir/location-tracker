@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -137,28 +139,50 @@ class SessionActivity : AppCompatActivity() {
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_tracking_status)
             .setTicker(getText(R.string.ticker_text))
-            .setWhen(System.currentTimeMillis());
+            .setWhen(System.currentTimeMillis())
 
         // Set the Channel ID for Android O.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId("location-tracking-channel"); // Channel ID
+            builder.setChannelId("location-tracking-channel") // Channel ID
         }
 
-        return builder.build();
+        return builder.build()
     }
 
     fun startSession(view: View) {
-        checkLocationSettings()
+        if (trackingService?.sessionIsActive() == true) {
+            val message = "A previous session is already active..."
+            Log.w(TAG, message)
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            return
+        }
 
-        Log.i(TAG, "Service started? " + startService(serviceIntent))
+        if (view is Button) {
+            view.isEnabled = false
+        }
 
-        val sessionId = System.currentTimeMillis()
-        trackingService?.startSession(notification, sessionId)
+        try {
+            checkLocationSettings()
+
+            Log.i(TAG, "Service started? " + startService(serviceIntent))
+
+            val sessionId = System.currentTimeMillis()
+            trackingService?.startSession(notification, sessionId)
+            findViewById<Button>(R.id.stopButton).isEnabled = true
+        } catch (e: Exception) {
+            Toast.makeText(this, "Failed to start session: $e", Toast.LENGTH_LONG).show()
+            view.isEnabled = true
+        }
     }
 
     fun stopSession(view: View) {
         trackingService?.stopSession()
         stopService(serviceIntent)
+
+        findViewById<Button>(R.id.startButton).isEnabled = true
+        if (view is Button) {
+            view.isEnabled = false
+        }
     }
 
     private fun checkPermission(): Boolean {
